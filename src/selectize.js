@@ -965,7 +965,7 @@ $.extend(Selectize.prototype, {
 	 */
 	focus: function() {
 		var self = this;
-		if (self.isDisabled) return;
+		if (self.isDisabled) return self;
 
 		self.ignoreFocus = true;
 		self.$control_input[0].focus();
@@ -973,6 +973,7 @@ $.extend(Selectize.prototype, {
 			self.ignoreFocus = false;
 			self.onFocus();
 		}, 0);
+		return self;
 	},
 
 	/**
@@ -983,6 +984,7 @@ $.extend(Selectize.prototype, {
 	blur: function(dest) {
 		this.$control_input[0].blur();
 		this.onBlur(null, dest);
+		return this;
 	},
 
 	/**
@@ -1572,6 +1574,7 @@ $.extend(Selectize.prototype, {
 		i = self.items.indexOf(value);
 
 		if (i !== -1) {
+			self.trigger('item_before_remove', value, $item);
 			$item.remove();
 			if ($item.hasClass('active')) {
 				idx = self.$activeItems.indexOf($item[0]);
