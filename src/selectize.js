@@ -37,6 +37,7 @@ var Selectize = function($input, settings) {
 		hasOptions       : false,
 		currentResults   : null,
 		lastValue        : '',
+		lastValidValue   : '',
 		caretPos         : 0,
 		loading          : 0,
 		loadedSearches   : {},
@@ -137,7 +138,7 @@ $.extend(Selectize.prototype, {
 		$control_input    = $('<input type="text" autocomplete="new-password" autofill="no" />').appendTo($control).attr('tabindex', $input.is(':disabled') ? '-1' : self.tabIndex);
 		$dropdown_parent  = $(settings.dropdownParent || $wrapper);
 		$dropdown         = $('<div>').addClass(settings.dropdownClass).addClass(inputMode).hide().appendTo($dropdown_parent);
-		$dropdown_content = $('<div>').addClass(settings.dropdownContentClass).appendTo($dropdown);
+		$dropdown_content = $('<div>').addClass(settings.dropdownContentClass).attr('tabindex', '-1').appendTo($dropdown);
 
 		if(inputId = $input.attr('id')) {
 			$control_input.attr('id', inputId + '-selectized');
@@ -253,6 +254,7 @@ $.extend(Selectize.prototype, {
 		$input.attr('tabindex', -1).hide().after(self.$wrapper);
 
 		if ($.isArray(settings.items)) {
+			self.lastValidValue = settings.items;
 			self.setValue(settings.items);
 			delete settings.items;
 		}
@@ -414,6 +416,10 @@ $.extend(Selectize.prototype, {
 	 * input / select element.
 	 */
 	onChange: function() {
+		var self = this;
+		if (self.getValue() !== "") {
+			self.lastValidValue = self.getValue();
+		}
 		this.$input.trigger('input');
 		this.$input.trigger('change');
 	},
@@ -759,6 +765,16 @@ $.extend(Selectize.prototype, {
 			}
 			self.trigger('load', results);
 		}]);
+	},
+
+	/**
+	 * Gets the value of input field of the control.
+	 *
+	 * @returns {string} value
+	 */
+	getTextboxValue: function() {
+		var $input = this.$control_input;
+		return $input.val();
 	},
 
 	/**
@@ -1123,8 +1139,8 @@ $.extend(Selectize.prototype, {
 		// sort optgroups
 		if (this.settings.lockOptgroupOrder) {
 			groups_order.sort(function(a, b) {
-				var a_order = self.optgroups[a].$order || 0;
-				var b_order = self.optgroups[b].$order || 0;
+				var a_order = self.optgroups[a] && self.optgroups[a].$order || 0;
+				var b_order = self.optgroups[b] && self.optgroups[b].$order || 0;
 				return a_order - b_order;
 			});
 		}
@@ -1458,6 +1474,34 @@ $.extend(Selectize.prototype, {
 	},
 
 	/**
+	 * Finds the first element with a "textContent" property
+	 * that matches the given textContent value.
+	 *
+	 * @param {mixed} textContent
+	 * @param {boolean} ignoreCase
+	 * @param {object} $els
+	 * @return {object}
+	 */
+	getElementWithTextContent: function(textContent, ignoreCase ,$els) {
+		textContent = hash_key(textContent);
+
+		if (typeof textContent !== 'undefined' && textContent !== null) {
+			for (var i = 0, n = $els.length; i < n; i++) {
+				var eleTextContent = $els[i].textContent
+				if (ignoreCase == true) {
+					eleTextContent = (eleTextContent !== null) ? eleTextContent.toLowerCase() : null;
+					textContent = textContent.toLowerCase();
+				}
+				if (eleTextContent === textContent) {
+					return $($els[i]);
+				}
+			}
+		}
+
+		return $();
+	},
+
+	/**
 	 * Returns the jQuery element of the item
 	 * matching the given value.
 	 *
@@ -1466,6 +1510,19 @@ $.extend(Selectize.prototype, {
 	 */
 	getItem: function(value) {
 		return this.getElementWithValue(value, this.$control.children());
+	},
+
+	/**
+	 * Returns the jQuery element of the item
+	 * matching the given textContent.
+	 *
+	 * @param {string} value
+	 * @param {boolean} ignoreCase
+	 * @returns {object}
+	 */
+	getFirstItemMatchedByTextContent: function(textContent, ignoreCase) {
+		ignoreCase = (ignoreCase !== null && ignoreCase === true) ? true : false;
+		return this.getElementWithTextContent(textContent, ignoreCase, this.$dropdown_content.find('[data-selectable]'));
 	},
 
 	/**
