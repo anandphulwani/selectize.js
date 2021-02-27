@@ -546,14 +546,6 @@ $.extend(Selectize.prototype, {
 					if (!self.isFull()) {
 						e.preventDefault();
 					}
-				} else if (self.getValue() === '' && ((self.settings.create && self.getTextboxValue() === '') || !self.settings.create)) {
-					self.setTextboxValue('')
-					self.refreshOptions(false);
-					if (self.options.hasOwnProperty('')) {
-						self.onOptionSelect({currentTarget: self.getOption('')});
-					} else if (!self.settings.allowEmptyOption) {
-						self.onOptionSelect({currentTarget: self.getOption(self.lastValidValue)});
-					}
 				}
 				if (self.settings.create && self.createItem() && self.settings.showAddOptionOnCreate) {
 					e.preventDefault();
@@ -678,6 +670,13 @@ $.extend(Selectize.prototype, {
 
 		self.isBlurring = true;
 		self.ignoreFocus = true;
+		if (self.getValue() === '' && ((self.settings.create && self.getTextboxValue() === '') || !self.settings.create)) {
+			if (self.options.hasOwnProperty('')) {
+				self.addItem('');
+			} else if (!self.settings.allowEmptyOption) {
+				self.addItem(self.lastValidValue);
+			}
+		}
 		if (self.settings.create && self.settings.createOnBlur) {
 			self.createItem(null, false, deactivate);
 		} else {

@@ -4,14 +4,15 @@ Selectize.define('select_on_focus', function(options) {
 	self.on('focus', function() {
 		var originalFocus = self.onFocus;
 		return function(e) {
-			var value = self.getItem(self.getValue()).text();
+			var value = self.getValue();
+			var text = self.getItem(self.getValue()).text();
 			self.clear();
-			self.setTextboxValue(value);
-			self.$control_input.select();
+			if (value !== "") {
+				self.setTextboxValue(text);	
+				self.$control_input.select();
+			}
 			setTimeout( function () {
-				if (self.settings.selectOnTab) {
-					self.setActiveOption(self.getFirstItemMatchedByTextContent(value));
-				}
+				self.setActiveOption(self.getOption(value));
 				self.settings.score = null;
 			},0);
 			return originalFocus.apply(this, arguments);
@@ -21,9 +22,6 @@ Selectize.define('select_on_focus', function(options) {
 	self.onBlur = (function() {
 		var originalBlur = self.onBlur;
 		return function(e) {
-			if (self.getValue() === "" && self.lastValidValue !== self.getValue()) {
-				self.setValue(self.lastValidValue);
-			}
 			setTimeout( function () {
 				self.settings.score = function() {
 					return function() {
