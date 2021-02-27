@@ -88,6 +88,11 @@ $select-arrow-offset: $select-padding-x + 5px;
 	text-align: center;
 }
 
+.#{$selectize}-emptyitemlabel {
+	text-align: center;
+	width: 85%;
+}
+
 .#{$selectize}-input {
   min-height: $input-height-base;
 

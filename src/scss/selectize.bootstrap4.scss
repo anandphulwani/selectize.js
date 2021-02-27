@@ -103,6 +103,11 @@ $select-arrow-offset: calc(#{$select-padding-x} + 5px) !default;
 	text-align: center;
 }
 
+.#{$selectize}-emptyitemlabel {
+	text-align: center;
+	width: 85%;
+}
+
 .#{$selectize}-input {
   min-height: $input-height;
   @include box-shadow($input-box-shadow);

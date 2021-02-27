@@ -306,6 +306,11 @@ $select-spinner-border-color: $select-color-border;
 	text-align: center;
 }
 
+.#{$selectize}-emptyitemlabel {
+	text-align: center;
+	width: 85%;
+}
+
 .#{$selectize}-dropdown .spinner {
   display: inline-block;
   width: $select-spinner-size;

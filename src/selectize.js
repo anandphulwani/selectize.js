@@ -311,7 +311,7 @@ $.extend(Selectize.prototype, {
 				return '<div class="option '+( data[field_value] === '' ? 'selectize-dropdown-emptyoptionlabel' : '')+'">' + escape(data[field_label]) + '</div>';
 			},
 			'item': function(data, escape) {
-				return '<div class="item">' + escape(data[field_label]) + '</div>';
+				return '<div class="item '+( data[field_value] === '' ? 'selectize-emptyitemlabel' : '')+'">' + escape(data[field_label]) + '</div>';
 			},
 			'option_create': function(data, escape) {
 				return '<div class="create">Add <strong>' + escape(data.input) + '</strong>&hellip;</div>';
