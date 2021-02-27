@@ -992,7 +992,7 @@ $.extend(Selectize.prototype, {
 		var self = this;
 		if (self.isDisabled) return self;
 
-		if (self.getValue() === '') {
+		if (self.getValue() === '' && self.allowEmptyOption && self.showEmptyOptionInDropdown) {
 			self.clear(true);
 		}
 
