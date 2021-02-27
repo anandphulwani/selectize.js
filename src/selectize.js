@@ -992,6 +992,10 @@ $.extend(Selectize.prototype, {
 		var self = this;
 		if (self.isDisabled) return self;
 
+		if (self.getValue() === '') {
+			self.clear(true);
+		}
+
 		self.ignoreFocus = true;
 		self.$control_input[0].focus();
 		window.setTimeout(function() {
