@@ -1,5 +1,6 @@
 Selectize.define('select_on_focus', function(options) {
 	var self = this;
+	var scoreFunction = self.settings.score;
 
 	self.on('focus', function() {
 		var originalFocus = self.onFocus;
@@ -13,7 +14,7 @@ Selectize.define('select_on_focus', function(options) {
 			}
 			setTimeout( function () {
 				self.setActiveOption(self.getOption(value));
-				self.settings.score = null;
+				self.settings.score = scoreFunction;
 			},0);
 			return originalFocus.apply(this, arguments);
 		};
