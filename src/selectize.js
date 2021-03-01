@@ -1043,10 +1043,12 @@ $.extend(Selectize.prototype, {
 		}
 
 		return {
-			fields      : settings.searchField,
-			conjunction : settings.searchConjunction,
-			sort        : sort,
-			nesting     : settings.nesting
+			fields                               : settings.searchField,
+			conjunction                          : settings.searchConjunction,
+			respect_word_boundaries              : false,
+			single_token_only                    : true,
+			sort                                 : sort,
+			nesting                              : settings.nesting
 		};
 	},
 
@@ -1114,10 +1116,12 @@ $.extend(Selectize.prototype, {
 		}
 
 		var self              = this;
-		var query             = $.trim(self.$control_input.val());
-		var results           = self.search(query);
+		var query             = self.$control_input.val();
+		var results           = self.search(query, self.getSearchOptions());
 		var $dropdown_content = self.$dropdown_content;
 		var active_before     = self.$activeOption && hash_key(self.$activeOption.attr('data-value'));
+
+		query = $.trim(query);
 
 		// build markup
 		n = results.items.length;
