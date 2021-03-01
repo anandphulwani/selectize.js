@@ -22,8 +22,8 @@ $select-color-optgroup-text: $dropdown-header-color;
 $select-color-optgroup-border: $dropdown-divider-bg;
 $select-color-dropdown: $dropdown-bg;
 $select-color-dropdown-border-top: mix($input-border, $input-bg, 0.8);
-$select-color-dropdown-item-active: $dropdown-link-hover-bg;
-$select-color-dropdown-item-active-text: $dropdown-link-hover-color;
+$select-color-dropdown-item-active: #2f2583;
+$select-color-dropdown-item-active-text: #ffffff;
 $select-color-dropdown-item-create-active-text: $dropdown-link-hover-color;
 $select-opacity-disabled: 0.5;
 $select-shadow-input: none;
@@ -82,6 +82,15 @@ $select-arrow-offset: $select-padding-x + 5px;
 
 .#{$selectize}-dropdown-content {
   padding: 5px 0;
+}
+
+.#{$selectize}-dropdown-emptyoptionlabel {
+	text-align: center;
+}
+
+.#{$selectize}-emptyitemlabel {
+	text-align: center;
+	width: 85%;
 }
 
 .#{$selectize}-input {
